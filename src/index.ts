@@ -58,18 +58,35 @@ const serverConfigSchema = z.object({
 		.describe("Your Hevy API key (available in the Hevy app settings)."),
 });
 
+// Schema for Smithery inspection - allows optional apiKey for tool discovery
+const optionalConfigSchema = z.object({
+	apiKey: z
+		.string()
+		.optional()
+		.describe("Your Hevy API key (available in the Hevy app settings)."),
+});
+
 export const configSchema = serverConfigSchema;
 type ServerConfig = z.infer<typeof serverConfigSchema>;
+type OptionalServerConfig = z.infer<typeof optionalConfigSchema>;
 
-function buildServer(apiKey: string) {
+function buildServer(apiKey: string | undefined) {
 	const baseServer = new McpServer({
 		name,
 		version,
 	});
 	const server = Sentry.wrapMcpServerWithSentry(baseServer);
 
-	const hevyClient = createClient(apiKey, HEVY_API_BASEURL);
-	console.error("Hevy client initialized with API key");
+	// Create client only if API key is provided
+	// Tools will return errors if called without a valid client
+	const hevyClient = apiKey ? createClient(apiKey, HEVY_API_BASEURL) : null;
+	if (hevyClient) {
+		console.error("Hevy client initialized with API key");
+	} else {
+		console.error(
+			"Hevy client not initialized - API key required for tool calls",
+		);
+	}
 
 	registerWorkoutTools(server, hevyClient);
 	registerRoutineTools(server, hevyClient);
@@ -80,8 +97,14 @@ function buildServer(apiKey: string) {
 	return server;
 }
 
-export default function createServer({ config }: { config: ServerConfig }) {
-	const { apiKey } = serverConfigSchema.parse(config);
+export default function createServer({
+	config,
+}: {
+	config: ServerConfig | OptionalServerConfig;
+}) {
+	// Allow inspection without API key, but tools will fail gracefully
+	const parsed = optionalConfigSchema.safeParse(config);
+	const apiKey = parsed.success ? parsed.data.apiKey : undefined;
 	const server = buildServer(apiKey);
 	return server.server;
 }
