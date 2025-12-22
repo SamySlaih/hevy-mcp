@@ -1,10 +1,3 @@
 # Smithery configuration for hevy-mcp
 # TypeScript runtime auto-detects configSchema and createServer from src/index.ts
-
 runtime: "typescript"
-
-# Server card metadata for Smithery discovery
-name: "hevy-mcp"
-description: "A Model Context Protocol (MCP) server for the Hevy fitness tracking app. Manage workouts, routines, exercise templates, and folders."
-vendor: "Christoph Kieslich"
-sourceUrl: "https://github.com/chrisdoc/hevy-mcp"
