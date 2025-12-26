@@ -3,6 +3,7 @@ import { z } from "zod";
 import type {
 	PostWorkoutsRequestBody,
 	PostWorkoutsRequestExercise,
+	PostWorkoutsRequestSet,
 	PostWorkoutsRequestSetRpeEnumKey,
 	PostWorkoutsRequestSetTypeEnumKey,
 } from "../generated/client/types/index.js";
@@ -200,15 +201,42 @@ export function registerWorkoutTools(
 						exercise_template_id: exercise.exerciseTemplateId,
 						superset_id: exercise.supersetId ?? null,
 						notes: exercise.notes ?? null,
-						sets: exercise.sets.map((set) => ({
-							type: set.type as PostWorkoutsRequestSetTypeEnumKey,
-							weight_kg: set.weight ?? set.weightKg ?? null,
-							reps: set.reps ?? null,
-							distance_meters: set.distance ?? set.distanceMeters ?? null,
-							duration_seconds: set.duration ?? set.durationSeconds ?? null,
-							rpe: (set.rpe as PostWorkoutsRequestSetRpeEnumKey | null) ?? null,
-							custom_metric: set.customMetric ?? null,
-						})),
+						sets: exercise.sets.map((set): PostWorkoutsRequestSet => {
+							// Build set object with only fields that have actual values
+							// This prevents sending null values for fields not relevant to the exercise type
+							const setData: PostWorkoutsRequestSet = {
+								type: set.type as PostWorkoutsRequestSetTypeEnumKey,
+							};
+
+							const weightValue = set.weight ?? set.weightKg;
+							if (weightValue != null) {
+								setData.weight_kg = weightValue;
+							}
+
+							if (set.reps != null) {
+								setData.reps = set.reps;
+							}
+
+							const distanceValue = set.distance ?? set.distanceMeters;
+							if (distanceValue != null) {
+								setData.distance_meters = distanceValue;
+							}
+
+							const durationValue = set.duration ?? set.durationSeconds;
+							if (durationValue != null) {
+								setData.duration_seconds = durationValue;
+							}
+
+							if (set.rpe != null) {
+								setData.rpe = set.rpe as PostWorkoutsRequestSetRpeEnumKey;
+							}
+
+							if (set.customMetric != null) {
+								setData.custom_metric = set.customMetric;
+							}
+
+							return setData;
+						}),
 					}),
 				),
 			};
@@ -297,15 +325,42 @@ export function registerWorkoutTools(
 						exercise_template_id: exercise.exerciseTemplateId,
 						superset_id: exercise.supersetId ?? null,
 						notes: exercise.notes ?? null,
-						sets: exercise.sets.map((set) => ({
-							type: set.type as PostWorkoutsRequestSetTypeEnumKey,
-							weight_kg: set.weight ?? set.weightKg ?? null,
-							reps: set.reps ?? null,
-							distance_meters: set.distance ?? set.distanceMeters ?? null,
-							duration_seconds: set.duration ?? set.durationSeconds ?? null,
-							rpe: (set.rpe as PostWorkoutsRequestSetRpeEnumKey | null) ?? null,
-							custom_metric: set.customMetric ?? null,
-						})),
+						sets: exercise.sets.map((set): PostWorkoutsRequestSet => {
+							// Build set object with only fields that have actual values
+							// This prevents sending null values for fields not relevant to the exercise type
+							const setData: PostWorkoutsRequestSet = {
+								type: set.type as PostWorkoutsRequestSetTypeEnumKey,
+							};
+
+							const weightValue = set.weight ?? set.weightKg;
+							if (weightValue != null) {
+								setData.weight_kg = weightValue;
+							}
+
+							if (set.reps != null) {
+								setData.reps = set.reps;
+							}
+
+							const distanceValue = set.distance ?? set.distanceMeters;
+							if (distanceValue != null) {
+								setData.distance_meters = distanceValue;
+							}
+
+							const durationValue = set.duration ?? set.durationSeconds;
+							if (durationValue != null) {
+								setData.duration_seconds = durationValue;
+							}
+
+							if (set.rpe != null) {
+								setData.rpe = set.rpe as PostWorkoutsRequestSetRpeEnumKey;
+							}
+
+							if (set.customMetric != null) {
+								setData.custom_metric = set.customMetric;
+							}
+
+							return setData;
+						}),
 					}),
 				),
 			};

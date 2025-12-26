@@ -131,6 +131,7 @@ describe("registerRoutineTools", () => {
 
 		const response = await handler(args as Record<string, unknown>);
 
+		// Only fields with actual values are included (null values are omitted)
 		expect(hevyClient.createRoutine).toHaveBeenCalledWith({
 			routine: {
 				title: "Pull Day",
@@ -147,10 +148,6 @@ describe("registerRoutineTools", () => {
 								type: "normal",
 								weight_kg: 80,
 								reps: 8,
-								distance_meters: null,
-								duration_seconds: null,
-								custom_metric: null,
-								rep_range: null,
 							},
 						],
 					},
@@ -206,6 +203,7 @@ describe("registerRoutineTools", () => {
 
 		await handler(args as Record<string, unknown>);
 
+		// Only fields with actual values are included (null values are omitted)
 		expect(hevyClient.createRoutine).toHaveBeenCalledWith({
 			routine: {
 				title: "Leg Day",
@@ -222,13 +220,148 @@ describe("registerRoutineTools", () => {
 								type: "normal",
 								weight_kg: 100,
 								reps: 10,
-								distance_meters: null,
-								duration_seconds: null,
-								custom_metric: null,
 								rep_range: {
 									start: 8,
 									end: 12,
 								},
+							},
+						],
+					},
+				],
+			},
+		});
+	});
+
+	it("create-routine with duration-based exercise only includes duration_seconds", async () => {
+		const { server, tool } = createMockServer();
+		const routine: Routine = {
+			id: "created-routine",
+			title: "Core Workout",
+			folder_id: null,
+			created_at: "2025-03-26T19:00:00Z",
+			updated_at: "2025-03-26T19:00:00Z",
+			exercises: [],
+		};
+		const hevyClient: HevyClient = {
+			createRoutine: vi.fn().mockResolvedValue(routine),
+		} as unknown as HevyClient;
+
+		registerRoutineTools(server, hevyClient);
+		const { handler } = getToolRegistration(tool, "create-routine");
+
+		// Duration-based exercise like Plank - only duration is provided
+		const args = {
+			title: "Core Workout",
+			folderId: null,
+			notes: "Core strength",
+			exercises: [
+				{
+					exerciseTemplateId: "C6C9B8A0", // Plank template ID
+					supersetId: null,
+					restSeconds: 60,
+					notes: "Hold steady",
+					sets: [
+						{
+							type: "normal" as const,
+							durationSeconds: 45,
+						},
+						{
+							type: "normal" as const,
+							duration: 60, // Test alternative field name
+						},
+					],
+				},
+			],
+		};
+
+		await handler(args as Record<string, unknown>);
+
+		// Only duration_seconds should be present, no weight_kg, reps, etc.
+		expect(hevyClient.createRoutine).toHaveBeenCalledWith({
+			routine: {
+				title: "Core Workout",
+				folder_id: null,
+				notes: "Core strength",
+				exercises: [
+					{
+						exercise_template_id: "C6C9B8A0",
+						superset_id: null,
+						rest_seconds: 60,
+						notes: "Hold steady",
+						sets: [
+							{
+								type: "normal",
+								duration_seconds: 45,
+							},
+							{
+								type: "normal",
+								duration_seconds: 60,
+							},
+						],
+					},
+				],
+			},
+		});
+	});
+
+	it("create-routine with distance_duration exercise includes both distance and duration", async () => {
+		const { server, tool } = createMockServer();
+		const routine: Routine = {
+			id: "created-routine",
+			title: "Cardio Day",
+			folder_id: null,
+			created_at: "2025-03-26T19:00:00Z",
+			updated_at: "2025-03-26T19:00:00Z",
+			exercises: [],
+		};
+		const hevyClient: HevyClient = {
+			createRoutine: vi.fn().mockResolvedValue(routine),
+		} as unknown as HevyClient;
+
+		registerRoutineTools(server, hevyClient);
+		const { handler } = getToolRegistration(tool, "create-routine");
+
+		// Distance/duration exercise like Elliptical
+		const args = {
+			title: "Cardio Day",
+			folderId: null,
+			notes: "Easy cardio",
+			exercises: [
+				{
+					exerciseTemplateId: "3303376C", // Elliptical template ID
+					supersetId: null,
+					restSeconds: 0,
+					notes: "Warm up",
+					sets: [
+						{
+							type: "normal" as const,
+							distanceMeters: 5000,
+							durationSeconds: 1800, // 30 minutes
+						},
+					],
+				},
+			],
+		};
+
+		await handler(args as Record<string, unknown>);
+
+		// Only distance_meters and duration_seconds should be present
+		expect(hevyClient.createRoutine).toHaveBeenCalledWith({
+			routine: {
+				title: "Cardio Day",
+				folder_id: null,
+				notes: "Easy cardio",
+				exercises: [
+					{
+						exercise_template_id: "3303376C",
+						superset_id: null,
+						rest_seconds: 0,
+						notes: "Warm up",
+						sets: [
+							{
+								type: "normal",
+								distance_meters: 5000,
+								duration_seconds: 1800,
 							},
 						],
 					},

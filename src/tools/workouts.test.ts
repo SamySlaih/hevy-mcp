@@ -169,6 +169,7 @@ describe("registerWorkoutTools", () => {
 
 		const response = await handler(args as Record<string, unknown>);
 
+		// Only fields with actual values are included (null values are omitted)
 		expect(hevyClient.createWorkout).toHaveBeenCalledWith({
 			workout: {
 				title: "New Workout",
@@ -187,10 +188,7 @@ describe("registerWorkoutTools", () => {
 								type: "normal",
 								weight_kg: 80,
 								reps: 8,
-								distance_meters: null,
-								duration_seconds: null,
 								rpe: 7,
-								custom_metric: null,
 							},
 						],
 					},
@@ -246,6 +244,7 @@ describe("registerWorkoutTools", () => {
 
 		await handler(args as Record<string, unknown>);
 
+		// Only fields with actual values are included (null values are omitted)
 		expect(hevyClient.createWorkout).toHaveBeenCalledWith({
 			workout: {
 				title: "Programmed Workout",
@@ -264,10 +263,156 @@ describe("registerWorkoutTools", () => {
 								type: "normal",
 								weight_kg: 50,
 								reps: 10,
-								distance_meters: null,
-								duration_seconds: null,
-								rpe: null,
-								custom_metric: null,
+							},
+						],
+					},
+				],
+			},
+		});
+	});
+
+	it("create-workout with duration-based exercise only includes duration_seconds", async () => {
+		const { server, tool } = createMockServer();
+		const createResult: Workout = {
+			id: "created-id",
+			title: "Core Session",
+			description: undefined,
+			start_time: "2025-03-27T07:00:00Z",
+			end_time: "2025-03-27T07:30:00Z",
+			created_at: "2025-03-27T07:00:00Z",
+			updated_at: "2025-03-27T07:00:00Z",
+			exercises: [],
+		};
+		const hevyClient = {
+			createWorkout: vi.fn().mockResolvedValue(createResult),
+		} as unknown as HevyClient;
+
+		registerWorkoutTools(server, hevyClient);
+		const { handler } = getToolRegistration(tool, "create-workout");
+
+		// Duration-based exercise like Plank - only duration is provided
+		const args = {
+			title: "Core Session",
+			description: null,
+			startTime: "2025-03-27T07:00:00Z",
+			endTime: "2025-03-27T07:30:00Z",
+			routineId: null,
+			isPrivate: false,
+			exercises: [
+				{
+					exerciseTemplateId: "C6C9B8A0", // Plank template ID
+					supersetId: null,
+					notes: "Hold steady",
+					sets: [
+						{
+							type: "normal" as const,
+							durationSeconds: 45,
+						},
+						{
+							type: "normal" as const,
+							duration: 60, // Test alternative field name
+						},
+					],
+				},
+			],
+		};
+
+		await handler(args as Record<string, unknown>);
+
+		// Only duration_seconds should be present, no weight_kg, reps, etc.
+		expect(hevyClient.createWorkout).toHaveBeenCalledWith({
+			workout: {
+				title: "Core Session",
+				description: null,
+				start_time: "2025-03-27T07:00:00Z",
+				end_time: "2025-03-27T07:30:00Z",
+				routine_id: null,
+				is_private: false,
+				exercises: [
+					{
+						exercise_template_id: "C6C9B8A0",
+						superset_id: null,
+						notes: "Hold steady",
+						sets: [
+							{
+								type: "normal",
+								duration_seconds: 45,
+							},
+							{
+								type: "normal",
+								duration_seconds: 60,
+							},
+						],
+					},
+				],
+			},
+		});
+	});
+
+	it("create-workout with distance_duration exercise includes both distance and duration", async () => {
+		const { server, tool } = createMockServer();
+		const createResult: Workout = {
+			id: "created-id",
+			title: "Cardio Session",
+			description: undefined,
+			start_time: "2025-03-27T07:00:00Z",
+			end_time: "2025-03-27T08:00:00Z",
+			created_at: "2025-03-27T07:00:00Z",
+			updated_at: "2025-03-27T07:00:00Z",
+			exercises: [],
+		};
+		const hevyClient = {
+			createWorkout: vi.fn().mockResolvedValue(createResult),
+		} as unknown as HevyClient;
+
+		registerWorkoutTools(server, hevyClient);
+		const { handler } = getToolRegistration(tool, "create-workout");
+
+		// Distance/duration exercise like Elliptical
+		const args = {
+			title: "Cardio Session",
+			description: null,
+			startTime: "2025-03-27T07:00:00Z",
+			endTime: "2025-03-27T08:00:00Z",
+			routineId: null,
+			isPrivate: false,
+			exercises: [
+				{
+					exerciseTemplateId: "3303376C", // Elliptical template ID
+					supersetId: null,
+					notes: "Warm up",
+					sets: [
+						{
+							type: "normal" as const,
+							distanceMeters: 5000,
+							durationSeconds: 1800, // 30 minutes
+						},
+					],
+				},
+			],
+		};
+
+		await handler(args as Record<string, unknown>);
+
+		// Only distance_meters and duration_seconds should be present
+		expect(hevyClient.createWorkout).toHaveBeenCalledWith({
+			workout: {
+				title: "Cardio Session",
+				description: null,
+				start_time: "2025-03-27T07:00:00Z",
+				end_time: "2025-03-27T08:00:00Z",
+				routine_id: null,
+				is_private: false,
+				exercises: [
+					{
+						exercise_template_id: "3303376C",
+						superset_id: null,
+						notes: "Warm up",
+						sets: [
+							{
+								type: "normal",
+								distance_meters: 5000,
+								duration_seconds: 1800,
 							},
 						],
 					},

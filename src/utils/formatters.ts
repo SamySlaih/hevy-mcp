@@ -176,12 +176,19 @@ export function formatRoutine(routine: Routine): FormattedRoutine {
 		createdAt: routine.created_at,
 		updatedAt: routine.updated_at,
 		exercises: routine.exercises?.map((exercise) => {
+			// The API returns superset_id (singular) but the OpenAPI spec defines supersets_id (plural)
+			// We check both to handle the actual API response correctly
+			const exerciseWithSupersetId = exercise as typeof exercise & {
+				superset_id?: number | null;
+			};
+			const supersetId =
+				exerciseWithSupersetId.superset_id ?? exercise.supersets_id;
 			return {
 				name: exercise.title,
 				index: exercise.index,
 				exerciseTemplateId: exercise.exercise_template_id,
 				notes: exercise.notes,
-				supersetId: exercise.supersets_id,
+				supersetId: supersetId,
 				restSeconds: exercise.rest_seconds,
 				sets: exercise.sets?.map((set) => ({
 					index: set.index,

@@ -230,6 +230,43 @@ describe("Formatters", () => {
 			});
 		});
 
+		it("should handle superset_id from actual API response (singular field)", () => {
+			const routineId = crypto.randomUUID();
+			const templateId = crypto.randomUUID();
+			// The actual API returns superset_id (singular) but the OpenAPI spec defines supersets_id (plural)
+			const routine = {
+				id: routineId,
+				title: "Routine with superset",
+				folder_id: null,
+				created_at: "2025-03-26T19:00:00Z",
+				updated_at: "2025-03-26T19:30:00Z",
+				exercises: [
+					{
+						title: "Triceps Pushdown",
+						index: 0,
+						exercise_template_id: templateId,
+						notes: "SUPERSET with Bicep Curls",
+						superset_id: 1, // This is what the actual API returns
+						supersets_id: null, // This is also returned but always null
+						sets: [
+							{
+								index: 0,
+								type: "normal",
+								weight_kg: 30,
+								reps: 15,
+								distance_meters: null,
+								duration_seconds: null,
+								custom_metric: null,
+							},
+						],
+					},
+				],
+			};
+
+			const result = formatRoutine(routine as unknown as Routine);
+			expect(result.exercises?.[0]?.supersetId).toBe(1);
+		});
+
 		it("should include repRange and rpe when present on sets", () => {
 			const routineId = crypto.randomUUID();
 			const templateId = crypto.randomUUID();

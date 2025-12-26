@@ -152,22 +152,45 @@ export function registerRoutineTools(
 							superset_id: exercise.supersetId ?? null,
 							rest_seconds: exercise.restSeconds ?? null,
 							notes: exercise.notes ?? null,
-							sets: exercise.sets.map(
-								(set): PostRoutinesRequestSet => ({
+							sets: exercise.sets.map((set): PostRoutinesRequestSet => {
+								// Build set object with only fields that have actual values
+								// This prevents sending null values for fields not relevant to the exercise type
+								const setData: PostRoutinesRequestSet = {
 									type: set.type as PostRoutinesRequestSetTypeEnumKey,
-									weight_kg: set.weight ?? set.weightKg ?? null,
-									reps: set.reps ?? null,
-									distance_meters: set.distance ?? set.distanceMeters ?? null,
-									duration_seconds: set.duration ?? set.durationSeconds ?? null,
-									custom_metric: set.customMetric ?? null,
-									rep_range: set.repRange
-										? {
-												start: set.repRange.start ?? null,
-												end: set.repRange.end ?? null,
-											}
-										: null,
-								}),
-							),
+								};
+
+								const weightValue = set.weight ?? set.weightKg;
+								if (weightValue != null) {
+									setData.weight_kg = weightValue;
+								}
+
+								if (set.reps != null) {
+									setData.reps = set.reps;
+								}
+
+								const distanceValue = set.distance ?? set.distanceMeters;
+								if (distanceValue != null) {
+									setData.distance_meters = distanceValue;
+								}
+
+								const durationValue = set.duration ?? set.durationSeconds;
+								if (durationValue != null) {
+									setData.duration_seconds = durationValue;
+								}
+
+								if (set.customMetric != null) {
+									setData.custom_metric = set.customMetric;
+								}
+
+								if (set.repRange) {
+									setData.rep_range = {
+										start: set.repRange.start ?? null,
+										end: set.repRange.end ?? null,
+									};
+								}
+
+								return setData;
+							}),
 						}),
 					),
 				},
@@ -245,22 +268,45 @@ export function registerRoutineTools(
 							superset_id: exercise.supersetId ?? null,
 							rest_seconds: exercise.restSeconds ?? null,
 							notes: exercise.notes ?? null,
-							sets: exercise.sets.map(
-								(set): PutRoutinesRequestSet => ({
+							sets: exercise.sets.map((set): PutRoutinesRequestSet => {
+								// Build set object with only fields that have actual values
+								// This prevents sending null values for fields not relevant to the exercise type
+								const setData: PutRoutinesRequestSet = {
 									type: set.type as PutRoutinesRequestSetTypeEnumKey,
-									weight_kg: set.weight ?? set.weightKg ?? null,
-									reps: set.reps ?? null,
-									distance_meters: set.distance ?? set.distanceMeters ?? null,
-									duration_seconds: set.duration ?? set.durationSeconds ?? null,
-									custom_metric: set.customMetric ?? null,
-									rep_range: set.repRange
-										? {
-												start: set.repRange.start ?? null,
-												end: set.repRange.end ?? null,
-											}
-										: null,
-								}),
-							),
+								};
+
+								const weightValue = set.weight ?? set.weightKg;
+								if (weightValue != null) {
+									setData.weight_kg = weightValue;
+								}
+
+								if (set.reps != null) {
+									setData.reps = set.reps;
+								}
+
+								const distanceValue = set.distance ?? set.distanceMeters;
+								if (distanceValue != null) {
+									setData.distance_meters = distanceValue;
+								}
+
+								const durationValue = set.duration ?? set.durationSeconds;
+								if (durationValue != null) {
+									setData.duration_seconds = durationValue;
+								}
+
+								if (set.customMetric != null) {
+									setData.custom_metric = set.customMetric;
+								}
+
+								if (set.repRange) {
+									setData.rep_range = {
+										start: set.repRange.start ?? null,
+										end: set.repRange.end ?? null,
+									};
+								}
+
+								return setData;
+							}),
 						}),
 					),
 				},
