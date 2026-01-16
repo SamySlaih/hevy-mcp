@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const exerciseHistoryEntrySchema = z.object({
     "workout_id": z.optional(z.string().describe("The workout ID")),
@@ -12,9 +12,9 @@ export const exerciseHistoryEntrySchema = z.object({
 "workout_end_time": z.optional(z.string().describe("ISO 8601 timestamp of when the workout was recorded to have ended.")),
 "exercise_template_id": z.optional(z.string().describe("The exercise template ID")),
 "weight_kg": z.number().describe("The weight in kilograms").nullish(),
-"reps": z.int().describe("The number of repetitions").nullish(),
-"distance_meters": z.int().describe("The distance in meters").nullish(),
-"duration_seconds": z.int().describe("The duration in seconds").nullish(),
+"reps": z.number().int().describe("The number of repetitions").nullish(),
+"distance_meters": z.number().int().describe("The distance in meters").nullish(),
+"duration_seconds": z.number().int().describe("The duration in seconds").nullish(),
 "rpe": z.number().describe("The Rating of Perceived Exertion").nullish(),
 "custom_metric": z.number().describe("A custom metric for the set").nullish(),
 "set_type": z.optional(z.string().describe("The type of set (warmup, normal, failure, dropset)"))

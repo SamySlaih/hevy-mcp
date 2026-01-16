@@ -4,14 +4,14 @@
 */
 
 import { exerciseTemplateSchema } from "./exerciseTemplateSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1ExerciseTemplatesExercisetemplateidPathParamsSchema = z.object({
     "exerciseTemplateId": z.any().describe("The id of the exercise template")
     })
 
 export const getV1ExerciseTemplatesExercisetemplateidHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**

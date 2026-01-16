@@ -4,7 +4,7 @@
 */
 
 import { setSchema } from "./setSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const exerciseSchema = z.object({
     "index": z.optional(z.number().describe("Index indicating the order of the exercise in the workout.")),
@@ -12,7 +12,5 @@ export const exerciseSchema = z.object({
 "notes": z.optional(z.string().describe("Notes on the exercise")),
 "exercise_template_id": z.optional(z.string().describe("The id of the exercise template. This can be used to fetch the exercise template.")),
 "supersets_id": z.number().describe("The id of the superset that the exercise belongs to. A value of null indicates the exercise is not part of a superset.").nullish(),
-get "sets"(){
-                return z.array(setSchema).optional()
-              }
+"sets": z.optional(z.array(z.lazy(() => setSchema)))
     })

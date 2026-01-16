@@ -5,14 +5,14 @@
 
 import { postWorkoutsRequestBodySchema } from "./postWorkoutsRequestBodySchema.ts";
 import { workoutSchema } from "./workoutSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const putV1WorkoutsWorkoutidPathParamsSchema = z.object({
     "workoutId": z.any().describe("The id of the workout")
     })
 
 export const putV1WorkoutsWorkoutidHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**

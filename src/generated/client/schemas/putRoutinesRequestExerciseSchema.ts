@@ -4,14 +4,12 @@
 */
 
 import { putRoutinesRequestSetSchema } from "./putRoutinesRequestSetSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const putRoutinesRequestExerciseSchema = z.object({
     "exercise_template_id": z.optional(z.string().describe("The ID of the exercise template.")),
-"superset_id": z.int().describe("The ID of the superset.").nullish(),
-"rest_seconds": z.int().describe("The rest time in seconds.").nullish(),
+"superset_id": z.number().int().describe("The ID of the superset.").nullish(),
+"rest_seconds": z.number().int().describe("The rest time in seconds.").nullish(),
 "notes": z.string().describe("Additional notes for the exercise.").nullish(),
-get "sets"(){
-                return z.array(putRoutinesRequestSetSchema).optional()
-              }
+"sets": z.optional(z.array(z.lazy(() => putRoutinesRequestSetSchema)))
     })

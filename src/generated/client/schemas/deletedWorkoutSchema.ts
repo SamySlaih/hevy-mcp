@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const deletedWorkoutSchema = z.object({
     "type": z.string().describe("Indicates the type of the event (deleted)"),

@@ -4,7 +4,7 @@
 */
 
 import { exerciseHistoryEntrySchema } from "./exerciseHistoryEntrySchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1ExerciseHistoryExercisetemplateidPathParamsSchema = z.object({
     "exerciseTemplateId": z.any().describe("The id of the exercise template")
@@ -16,16 +16,14 @@ export const getV1ExerciseHistoryExercisetemplateidQueryParamsSchema = z.object(
     }).optional()
 
 export const getV1ExerciseHistoryExercisetemplateidHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**
  * @description A list of exercise history entries
  */
 export const getV1ExerciseHistoryExercisetemplateid200Schema = z.object({
-    get "exercise_history"(){
-                return z.array(exerciseHistoryEntrySchema).optional()
-              }
+    "exercise_history": z.optional(z.array(z.lazy(() => exerciseHistoryEntrySchema)))
     })
 
 /**

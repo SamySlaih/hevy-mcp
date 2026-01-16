@@ -3,6 +3,6 @@
 * Do not edit manually.
 */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const equipmentCategorySchema = z.enum(["none", "barbell", "dumbbell", "kettlebell", "machine", "plate", "resistance_band", "suspension", "other"])

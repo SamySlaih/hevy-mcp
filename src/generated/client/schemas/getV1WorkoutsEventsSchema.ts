@@ -4,7 +4,7 @@
 */
 
 import { paginatedWorkoutEventsSchema } from "./paginatedWorkoutEventsSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1WorkoutsEventsQueryParamsSchema = z.object({
     "page": z.coerce.number().int().default(1).describe("Page number (Must be 1 or greater)"),
@@ -13,7 +13,7 @@ export const getV1WorkoutsEventsQueryParamsSchema = z.object({
     })
 
 export const getV1WorkoutsEventsHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**

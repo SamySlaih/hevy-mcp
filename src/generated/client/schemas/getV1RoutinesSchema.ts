@@ -4,7 +4,7 @@
 */
 
 import { routineSchema } from "./routineSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1RoutinesQueryParamsSchema = z.object({
     "page": z.coerce.number().int().default(1).describe("Page number (Must be 1 or greater)"),
@@ -12,18 +12,16 @@ export const getV1RoutinesQueryParamsSchema = z.object({
     })
 
 export const getV1RoutinesHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**
  * @description A paginated list of routines
  */
 export const getV1Routines200Schema = z.object({
-    "page": z.optional(z.int().describe("Current page number")),
-"page_count": z.optional(z.int().describe("Total number of pages")),
-get "routines"(){
-                return z.array(routineSchema).optional()
-              }
+    "page": z.optional(z.number().int().describe("Current page number")),
+"page_count": z.optional(z.number().int().describe("Total number of pages")),
+"routines": z.optional(z.array(z.lazy(() => routineSchema)))
     })
 
 /**

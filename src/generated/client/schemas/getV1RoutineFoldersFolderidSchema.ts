@@ -4,14 +4,14 @@
 */
 
 import { routineFolderSchema } from "./routineFolderSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1RoutineFoldersFolderidPathParamsSchema = z.object({
     "folderId": z.any().describe("The id of the routine folder")
     })
 
 export const getV1RoutineFoldersFolderidHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**

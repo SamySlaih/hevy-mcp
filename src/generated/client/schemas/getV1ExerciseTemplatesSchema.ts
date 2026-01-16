@@ -4,7 +4,7 @@
 */
 
 import { exerciseTemplateSchema } from "./exerciseTemplateSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1ExerciseTemplatesQueryParamsSchema = z.object({
     "page": z.coerce.number().int().default(1).describe("Page number (Must be 1 or greater)"),
@@ -12,18 +12,16 @@ export const getV1ExerciseTemplatesQueryParamsSchema = z.object({
     })
 
 export const getV1ExerciseTemplatesHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**
  * @description A paginated list of exercise templates
  */
 export const getV1ExerciseTemplates200Schema = z.object({
-    "page": z.optional(z.int().default(1).describe("Current page number")),
-"page_count": z.optional(z.int().default(5).describe("Total number of pages")),
-get "exercise_templates"(){
-                return z.array(exerciseTemplateSchema).optional()
-              }
+    "page": z.optional(z.number().int().default(1).describe("Current page number")),
+"page_count": z.optional(z.number().int().default(5).describe("Total number of pages")),
+"exercise_templates": z.optional(z.array(z.lazy(() => exerciseTemplateSchema)))
     })
 
 /**

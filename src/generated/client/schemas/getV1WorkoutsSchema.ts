@@ -4,7 +4,7 @@
 */
 
 import { workoutSchema } from "./workoutSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const getV1WorkoutsQueryParamsSchema = z.object({
     "page": z.coerce.number().int().default(1).describe("Page number (Must be 1 or greater)"),
@@ -12,18 +12,16 @@ export const getV1WorkoutsQueryParamsSchema = z.object({
     })
 
 export const getV1WorkoutsHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**
  * @description A paginated list of workouts
  */
 export const getV1Workouts200Schema = z.object({
-    "page": z.optional(z.int().describe("Current page number")),
-"page_count": z.optional(z.int().describe("Total number of pages")),
-get "workouts"(){
-                return z.array(workoutSchema).optional()
-              }
+    "page": z.optional(z.number().int().describe("Current page number")),
+"page_count": z.optional(z.number().int().describe("Total number of pages")),
+"workouts": z.optional(z.array(z.lazy(() => workoutSchema)))
     })
 
 /**

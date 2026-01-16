@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const setSchema = z.object({
     "index": z.optional(z.number().describe("Index indicating the order of the set in the workout.")),

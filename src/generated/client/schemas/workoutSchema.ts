@@ -3,7 +3,7 @@
 * Do not edit manually.
 */
 
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const workoutSchema = z.object({
     "id": z.optional(z.string().describe("The workout ID.")),

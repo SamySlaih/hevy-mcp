@@ -5,10 +5,10 @@
 
 import { postRoutineFolderRequestBodySchema } from "./postRoutineFolderRequestBodySchema.ts";
 import { routineFolderSchema } from "./routineFolderSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const postV1RoutineFoldersHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**

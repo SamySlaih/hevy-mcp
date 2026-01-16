@@ -4,11 +4,9 @@
 */
 
 import { workoutSchema } from "./workoutSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const updatedWorkoutSchema = z.object({
     "type": z.string().describe("Indicates the type of the event (updated)"),
-get "workout"(){
-                return workoutSchema
-              }
+"workout": z.lazy(() => workoutSchema)
     })

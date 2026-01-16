@@ -4,17 +4,17 @@
 */
 
 import { createCustomExerciseRequestBodySchema } from "./createCustomExerciseRequestBodySchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const postV1ExerciseTemplatesHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**
  * @description The exercise template was successfully created
  */
 export const postV1ExerciseTemplates200Schema = z.object({
-    "id": z.optional(z.int().describe("The ID of the exercise template"))
+    "id": z.optional(z.number().int().describe("The ID of the exercise template"))
     })
 
 /**

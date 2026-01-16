@@ -5,10 +5,10 @@
 
 import { postRoutinesRequestBodySchema } from "./postRoutinesRequestBodySchema.ts";
 import { routineSchema } from "./routineSchema.ts";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 export const postV1RoutinesHeaderParamsSchema = z.object({
-    "api-key": z.uuid()
+    "api-key": z.string().uuid()
     })
 
 /**
