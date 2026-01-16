@@ -40,8 +40,15 @@ jobs:
     - name: Run Check
       run: pnpm run check
 
+    - name: Validate OpenAPI Spec
+      run: pnpm run validate:openapi
+
     - name: Run build
       run: pnpm run build
+      env:
+        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+        SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
     - name: Run tests with coverage
       run: pnpm vitest run --coverage

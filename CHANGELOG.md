@@ -1,3 +1,65 @@
+## [1.19.2](https://github.com/chrisdoc/hevy-mcp/compare/v1.19.1...v1.19.2) (2026-01-12)
+
+## [1.19.1](https://github.com/chrisdoc/hevy-mcp/compare/v1.19.0...v1.19.1) (2026-01-12)
+
+# [1.19.0](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.11...v1.19.0) (2026-01-08)
+
+
+### Features
+
+* **client:** export HevyApiClient type for external type annotations ([f3530d3](https://github.com/chrisdoc/hevy-mcp/commit/f3530d31d09c8a1cc4b27b71158afcf865eb5604))
+
+## [1.18.11](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.10...v1.18.11) (2026-01-08)
+
+
+### Bug Fixes
+
+* **workouts:** omit routine_id from create/update ([#229](https://github.com/chrisdoc/hevy-mcp/issues/229)) ([bca641a](https://github.com/chrisdoc/hevy-mcp/commit/bca641a2efb6008389630501b2a6c926ca7b76c6))
+
+## [1.18.10](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.9...v1.18.10) (2026-01-08)
+
+
+### Bug Fixes
+
+* extract axios response data for better error messages ([#233](https://github.com/chrisdoc/hevy-mcp/issues/233)) ([6ba1dbc](https://github.com/chrisdoc/hevy-mcp/commit/6ba1dbcf5d24b8a5b653a852e5b23b541a2b8a65))
+
+## [1.18.9](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.8...v1.18.9) (2026-01-08)
+
+## [1.18.8](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.7...v1.18.8) (2026-01-07)
+
+## [1.18.7](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.6...v1.18.7) (2026-01-05)
+
+## [1.18.6](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.5...v1.18.6) (2026-01-05)
+
+## [1.18.5](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.4...v1.18.5) (2025-12-29)
+
+## [1.18.4](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.3...v1.18.4) (2025-12-29)
+
+## [1.18.3](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.2...v1.18.3) (2025-12-28)
+
+## [1.18.2](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.1...v1.18.2) (2025-12-25)
+
+## [1.18.1](https://github.com/chrisdoc/hevy-mcp/compare/v1.18.0...v1.18.1) (2025-12-24)
+
+# [1.18.0](https://github.com/chrisdoc/hevy-mcp/compare/v1.17.3...v1.18.0) (2025-12-23)
+
+
+### Features
+
+* integrate Sentry Rollup plugin for source map uploads ([#215](https://github.com/chrisdoc/hevy-mcp/issues/215)) ([c1195c1](https://github.com/chrisdoc/hevy-mcp/commit/c1195c11288698df2d9e190bd92c5f0e014179d8))
+
+
+### BREAKING CHANGES
+
+* **HTTP/SSE transport removed**: hevy-mcp now runs exclusively over stdio.
+
+  For migration steps (including Cursor config examples), see:
+  https://github.com/chrisdoc/hevy-mcp#migration-from-httpsse-transport
+
+## [1.17.3](https://github.com/chrisdoc/hevy-mcp/compare/v1.17.2...v1.17.3) (2025-12-23)
+
+## [1.17.2](https://github.com/chrisdoc/hevy-mcp/compare/v1.17.1...v1.17.2) (2025-12-23)
+
 ## [1.17.1](https://github.com/chrisdoc/hevy-mcp/compare/v1.17.0...v1.17.1) (2025-12-22)
 
 # [1.17.0](https://github.com/chrisdoc/hevy-mcp/compare/v1.16.0...v1.17.0) (2025-12-20)

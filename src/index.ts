@@ -1,4 +1,3 @@
-import dotenvx from "@dotenvx/dotenvx";
 import * as Sentry from "@sentry/node";
 
 declare const __HEVY_MCP_NAME__: string | undefined;
@@ -22,8 +21,9 @@ const name =
 const version =
 	typeof __HEVY_MCP_VERSION__ === "string" ? __HEVY_MCP_VERSION__ : "dev";
 
-// Configure dotenvx with quiet mode to prevent stdout pollution in stdio mode
-dotenvx.config({ quiet: true });
+// Environment variables are loaded via Node.js native --env-file flag (Node.js 20.6+)
+// or set directly in the environment. No dotenv dependency needed.
+// This avoids stdout pollution that corrupts MCP JSON-RPC communication in stdio mode.
 
 // Sentry monitoring - only enabled if SENTRY_DSN environment variable is set
 const sentryDsn = process.env.SENTRY_DSN;
@@ -85,7 +85,7 @@ function buildServer(apiKey: string) {
 export default function createServer({ config }: { config: ServerConfig }) {
 	const { apiKey } = serverConfigSchema.parse(config);
 	const server = buildServer(apiKey);
-	return server.server;
+	return server;
 }
 
 export async function runServer() {
