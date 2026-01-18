@@ -325,7 +325,6 @@ describe("registerWorkoutTools", () => {
 				description: null,
 				start_time: "2025-03-27T07:00:00Z",
 				end_time: "2025-03-27T07:30:00Z",
-				routine_id: null,
 				is_private: false,
 				exercises: [
 					{
@@ -400,7 +399,6 @@ describe("registerWorkoutTools", () => {
 				description: null,
 				start_time: "2025-03-27T07:00:00Z",
 				end_time: "2025-03-27T08:00:00Z",
-				routine_id: null,
 				is_private: false,
 				exercises: [
 					{
