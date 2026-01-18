@@ -5,15 +5,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
-import {
-	afterAll,
-	afterEach,
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-} from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
 import { registerWorkoutTools } from "../../src/tools/workouts.js";
 import { createClient } from "../../src/utils/hevyClient.js";
@@ -51,31 +43,13 @@ const FormattedWorkoutSchema = z.object({
 // Zod schema for the get-workouts response (array of formatted workouts)
 const GetWorkoutsResponseSchema = z.array(FormattedWorkoutSchema);
 
-describe("Hevy MCP Server Integration Tests", () => {
+// Skip the entire test suite if HEVY_API_KEY is not set
+const hevyApiKey = process.env.HEVY_API_KEY || "";
+const hasApiKey = !!hevyApiKey;
+
+describe.skipIf(!hasApiKey)("Hevy MCP Server Integration Tests", () => {
 	let server: McpServer | null = null;
 	let client: Client | null = null;
-	let hevyApiKey: string;
-	let hasApiKey = false;
-
-	beforeAll(() => {
-		hevyApiKey = process.env.HEVY_API_KEY || "";
-		hasApiKey = !!hevyApiKey;
-
-		if (!hasApiKey) {
-			throw new Error(
-				"HEVY_API_KEY is not set in environment variables. Integration tests cannot run without a valid API key.\n\n" +
-					"For local development:\n" +
-					"1. Create a .env file in the project root\n" +
-					"2. Add HEVY_API_KEY=your_api_key to the file\n\n" +
-					"For GitHub Actions:\n" +
-					"1. Go to your GitHub repository\n" +
-					"2. Click on Settings > Secrets and variables > Actions\n" +
-					"3. Click on New repository secret\n" +
-					"4. Set the name to HEVY_API_KEY and the value to your Hevy API key\n" +
-					"5. Click Add secret",
-			);
-		}
-	});
 
 	beforeEach(async () => {
 		// Create server instance
